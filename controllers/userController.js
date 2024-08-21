@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { getAllUsersQuery, deleteUserQuery, getUserQuery, createUserQuery } = require("../db/userQueries");
 const { parseBoolean } = require("../parseBool");
+const bcrypt = require("bcryptjs");
 
 exports.getAllUsers = asyncHandler(async (req, res) => {
   try {
@@ -26,14 +27,19 @@ exports.getUser = asyncHandler(async (req, res) => {
 
 exports.createUser = asyncHandler(async (req, res) => {
   try {
-    const user = {
-      email: req.body.email,
-      username: req.body.username,
-      password: req.body.password,
-      isAuthor: parseBoolean(req.body.isauthor),
-    };
-    const userQ = await createUserQuery(user);
-    return res.send(`User created successfully! ${userQ}`);
+    bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+      if (err) {
+        console.log(err.message);
+      }
+      const user = {
+        email: req.body.email,
+        username: req.body.username,
+        password: hashedPassword,
+        isAuthor: parseBoolean(req.body.isauthor),
+      };
+      const userQ = await createUserQuery(user);
+      return res.send(`User created successfully! ${userQ}`);
+    });
   } catch (error) {
     return res.send(`Oops, couldn't create this user. Error: ${error}`);
   }
