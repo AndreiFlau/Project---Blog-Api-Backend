@@ -33,10 +33,11 @@ exports.createComment = asyncHandler(async (req, res) => {
     };
 
     //get userid based on session id
+    const id = Number(req.user.id);
 
-    const commentQ = await createCommentQuery(comment);
+    const commentQ = await createCommentQuery(comment, id);
 
-    return res.send(commentQ);
+    return res.send("Comment created successfully!");
   } catch (error) {
     return res.send(`Oops, couldn't create the comment requested. Error: ${error}`);
   }

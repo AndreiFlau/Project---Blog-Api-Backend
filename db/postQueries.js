@@ -16,11 +16,12 @@ async function getPostQuery(id) {
   return post;
 }
 
-async function createPostQuery(post) {
+async function createPostQuery(post, id) {
   await prisma.posts.create({
     data: {
       title: post.title,
       content: post.content,
+      userId: id,
     },
   });
 }

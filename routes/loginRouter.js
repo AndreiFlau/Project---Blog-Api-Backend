@@ -4,7 +4,12 @@ const loginRouter = Router();
 
 loginRouter.post("/", passport.authenticate("local", { session: false }), (req, res) => {
   res.json({
-    user: req.user.user,
+    user: {
+      id: req.user.user.id,
+      email: req.user.user.email,
+      username: req.user.user.username,
+      author: req.user.user.isAuthor,
+    },
     token: req.user.token,
   });
 });

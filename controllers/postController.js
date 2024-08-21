@@ -33,11 +33,11 @@ exports.createPost = asyncHandler(async (req, res) => {
       content: req.body.content,
     };
 
-    //get userid based on session id
+    const id = Number(req.user.id);
 
-    const postQ = await createPostQuery(post);
+    const postQ = await createPostQuery(post, id);
 
-    return res.send(postQ);
+    return res.send("Post created successfully!");
   } catch (error) {
     return res.send(`Oops, couldn't create the post requested. Error: ${error}`);
   }

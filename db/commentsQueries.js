@@ -16,10 +16,11 @@ async function getCommentQuery(id) {
   return comment;
 }
 
-async function createCommentQuery(comment) {
+async function createCommentQuery(comment, id) {
   await prisma.comments.create({
     data: {
       content: comment.content,
+      userId: id,
     },
   });
 }
