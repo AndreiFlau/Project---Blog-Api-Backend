@@ -1,9 +1,28 @@
 const asyncHandler = require("express-async-handler");
-const { getAllCommentsQuery, getCommentQuery, createCommentQuery, deleteCommentQuery } = require("../db/commentsQueries");
+const {
+  getAllCommentsQuery,
+  getCommentQuery,
+  createCommentQuery,
+  deleteCommentQuery,
+  getAllCommentsFromPostQuery,
+} = require("../db/commentsQueries");
 
 exports.getAllComments = asyncHandler(async (req, res) => {
   try {
     const comments = await getAllCommentsQuery();
+    if (comments.length === 0) {
+      throw Error("There are no comments.");
+    }
+    return res.send(comments);
+  } catch (error) {
+    return res.send(`Oops, couldn't find any comments. Error: ${error}`);
+  }
+});
+
+exports.getAllCommentsFromPost = asyncHandler(async (req, res) => {
+  try {
+    const postId = Number(req.params.id);
+    const comments = await getAllCommentsFromPostQuery(postId);
     if (comments.length === 0) {
       throw Error("There are no comments.");
     }
@@ -28,6 +47,7 @@ exports.getComment = asyncHandler(async (req, res) => {
 
 exports.createComment = asyncHandler(async (req, res) => {
   try {
+    const postId = Number(req.params.id);
     const comment = {
       content: req.body.content,
     };
@@ -35,7 +55,7 @@ exports.createComment = asyncHandler(async (req, res) => {
     //get userid based on session id
     const id = Number(req.user.id);
 
-    const commentQ = await createCommentQuery(comment, id);
+    const commentQ = await createCommentQuery(comment, id, postId);
 
     return res.send("Comment created successfully!");
   } catch (error) {

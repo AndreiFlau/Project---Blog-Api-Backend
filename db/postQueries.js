@@ -17,13 +17,15 @@ async function getPostQuery(id) {
 }
 
 async function createPostQuery(post, id) {
-  await prisma.posts.create({
+  const createdPost = await prisma.posts.create({
     data: {
       title: post.title,
       content: post.content,
       userId: id,
     },
   });
+
+  return createdPost.id;
 }
 
 async function deletePostQuery(id) {

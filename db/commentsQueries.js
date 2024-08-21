@@ -16,11 +16,24 @@ async function getCommentQuery(id) {
   return comment;
 }
 
-async function createCommentQuery(comment, id) {
+async function getAllCommentsFromPostQuery(postId) {
+  const comments = await prisma.posts.findFirst({
+    where: {
+      id: postId,
+    },
+    include: {
+      Comments: true,
+    },
+  });
+  return comments.Comments;
+}
+
+async function createCommentQuery(comment, id, postId) {
   await prisma.comments.create({
     data: {
       content: comment.content,
       userId: id,
+      postId: postId,
     },
   });
 }
@@ -33,4 +46,4 @@ async function deleteCommentQuery(id) {
   });
 }
 
-module.exports = { getCommentQuery, getAllCommentsQuery, createCommentQuery, deleteCommentQuery };
+module.exports = { getCommentQuery, getAllCommentsQuery, getAllCommentsFromPostQuery, createCommentQuery, deleteCommentQuery };

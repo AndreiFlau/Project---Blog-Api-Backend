@@ -37,7 +37,7 @@ exports.createPost = asyncHandler(async (req, res) => {
 
     const postQ = await createPostQuery(post, id);
 
-    return res.send("Post created successfully!");
+    return res.send(`Post created successfully! Your post ID is: ${postQ}`);
   } catch (error) {
     return res.send(`Oops, couldn't create the post requested. Error: ${error}`);
   }

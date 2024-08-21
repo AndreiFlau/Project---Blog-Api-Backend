@@ -24,12 +24,13 @@ model User {
 }
 
 model Posts {
-  id      Int      @id @default(autoincrement())
-  title   String
-  content String
-  date    DateTime @default(now())
-  user    User     @relation(fields: [userId], references: [id])
-  userId  Int
+  id       Int        @id @default(autoincrement())
+  title    String
+  content  String
+  date     DateTime   @default(now())
+  user     User       @relation(fields: [userId], references: [id])
+  userId   Int
+  Comments Comments[]
 }
 
 model Comments {
@@ -38,4 +39,6 @@ model Comments {
   date    DateTime @default(now())
   user    User     @relation(fields: [userId], references: [id])
   userId  Int
+  post    Posts    @relation(fields: [postId], references: [id])
+  postId  Int
 }
