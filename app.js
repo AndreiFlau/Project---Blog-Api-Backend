@@ -4,11 +4,21 @@ const indexRouter = require("./routes/indexRouter");
 const loginRouter = require("./routes/logInRouter");
 const auth = require("./middleware/auth");
 const passport = require("passport");
+const cors = require("cors");
 const app = express();
 require("dotenv").config();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 app.set(("views", path.join(__dirname, "views")));
 app.set("view engine", "ejs");
