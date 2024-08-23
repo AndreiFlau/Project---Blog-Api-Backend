@@ -35,7 +35,7 @@ exports.createUser = asyncHandler(async (req, res) => {
         email: req.body.email,
         username: req.body.username,
         password: hashedPassword,
-        isAuthor: parseBoolean(req.body.isauthor),
+        isAuthor: parseBoolean(req.body.isAuthor),
       };
       const userQ = await createUserQuery(user);
       return res.send(`User created successfully! ${userQ}`);
