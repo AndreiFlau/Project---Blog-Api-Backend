@@ -3,9 +3,13 @@ function parseBoolean(value) {
     return value;
   }
   if (typeof value === "string") {
-    return value.toLowerCase() === "true";
+    const lowerCaseValue = value.toLowerCase();
+    if (lowerCaseValue === "true") {
+      return true;
+    } else if (lowerCaseValue === "false") {
+      return false;
+    }
   }
-  return !!value; // Fallback, converts truthy/falsy values to true/false
 }
 
 module.exports = { parseBoolean };

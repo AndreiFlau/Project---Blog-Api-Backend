@@ -13,7 +13,6 @@ const apiRouter = Router();
 //user
 apiRouter.get("/users", getAllUsers);
 apiRouter.get("/users/:id", getUser);
-apiRouter.post("/users", createUser);
 apiRouter.delete("/users/:id", deleteUser);
 
 //posts
