@@ -36,4 +36,16 @@ async function deletePostQuery(id) {
   });
 }
 
-module.exports = { getAllPostsQuery, getPostQuery, createPostQuery, deletePostQuery };
+async function editPostQuery(postId, post) {
+  await prisma.posts.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      title: post.title,
+      content: post.content,
+    },
+  });
+}
+
+module.exports = { getAllPostsQuery, getPostQuery, createPostQuery, deletePostQuery, editPostQuery };

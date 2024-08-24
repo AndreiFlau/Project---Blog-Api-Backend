@@ -46,4 +46,22 @@ async function deleteCommentQuery(id) {
   });
 }
 
-module.exports = { getCommentQuery, getAllCommentsQuery, getAllCommentsFromPostQuery, createCommentQuery, deleteCommentQuery };
+async function editCommentQuery(commentId, comment) {
+  await prisma.comments.update({
+    where: {
+      id: commentId,
+    },
+    data: {
+      content: comment.content,
+    },
+  });
+}
+
+module.exports = {
+  getCommentQuery,
+  getAllCommentsQuery,
+  getAllCommentsFromPostQuery,
+  createCommentQuery,
+  deleteCommentQuery,
+  editCommentQuery,
+};

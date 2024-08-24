@@ -6,6 +6,8 @@ const auth = require("./middleware/auth");
 const passport = require("passport");
 const cors = require("cors");
 const registerRouter = require("./routes/registerRouter");
+const adminRouter = require("./routes/adminRouter");
+const authAdmin = require("./middleware/authAdmin");
 const app = express();
 require("dotenv").config();
 
@@ -26,6 +28,7 @@ app.set("view engine", "ejs");
 auth(app);
 
 app.use("/api", passport.authenticate("jwt", { session: false }), indexRouter);
+authAdmin(app.use("/admin", passport.authenticate("jwt", { session: false }), adminRouter));
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 

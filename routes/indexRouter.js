@@ -13,19 +13,16 @@ const apiRouter = Router();
 //user
 apiRouter.get("/users", getAllUsers);
 apiRouter.get("/users/:id", getUser);
-apiRouter.delete("/users/:id", deleteUser);
 
 //posts
 apiRouter.get("/posts", getAllPosts);
 apiRouter.get("/posts/:id", getPost);
 apiRouter.post("/posts", createPost);
-apiRouter.delete("/posts/:id", deletePost);
 
 //comments
 apiRouter.get("/comments", getAllComments);
 apiRouter.get("/posts/:id/comments", getAllCommentsFromPost);
 apiRouter.get("/comments/:id", getComment);
 apiRouter.post("/posts/:id/comments", createComment);
-apiRouter.delete("/comments/:id", deleteComment);
 
 module.exports = apiRouter;

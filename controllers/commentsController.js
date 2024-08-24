@@ -5,6 +5,7 @@ const {
   createCommentQuery,
   deleteCommentQuery,
   getAllCommentsFromPostQuery,
+  editCommentQuery,
 } = require("../db/commentsQueries");
 
 exports.getAllComments = asyncHandler(async (req, res) => {
@@ -88,3 +89,40 @@ exports.deleteComment = asyncHandler(async (req, res) => {
     });
   }
 });
+
+exports.editComment = asyncHandler(async (req, res) => {
+  try {
+    const commentId = Number(req.params.id);
+
+    const comment = {
+      content: req.body.content,
+    };
+
+    await editCommentQuery(commentId, comment);
+
+    return res.send("Comment edited successfully!");
+  } catch (error) {
+    return res.json({
+      message: "Oops, couldn't edit the comment requested.",
+      error: error.message,
+    });
+  }
+});
+
+// exports.editCategoryPost = [
+//   validateCategory,
+//   asyncHandler(async (req, res) => {
+//     const errors = validationResult(req);
+//     const categoryId = req.params.id;
+//     const category = await getSingleCategory(categoryId);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).render("./changecategories/editcategory", {
+//         errors: errors.array(),
+//         category: category,
+//       });
+//     }
+//     const name = req.body.categoryname;
+//     await editCategory(categoryId, name);
+//     res.redirect("/categories");
+//   }),
+// ];

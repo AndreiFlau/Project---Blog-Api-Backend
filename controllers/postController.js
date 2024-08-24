@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const { getAllPostsQuery, getPostQuery, createPostQuery, deletePostQuery } = require("../db/postQueries");
+const { getAllPostsQuery, getPostQuery, createPostQuery, deletePostQuery, editPostQuery } = require("../db/postQueries");
 
 exports.getAllPosts = asyncHandler(async (req, res) => {
   try {
@@ -51,5 +51,24 @@ exports.deletePost = asyncHandler(async (req, res) => {
     return res.send(`Deleted post with id ${id} successfully!`);
   } catch (error) {
     return res.send(`Oops, couldn't delete the post requested. Error: ${error}`);
+  }
+});
+
+exports.editPost = asyncHandler(async (req, res) => {
+  try {
+    const postId = Number(req.params.id);
+
+    const post = {
+      content: req.body.content,
+    };
+
+    await editPostQuery(postId, post);
+
+    return res.send("post edited successfully!");
+  } catch (error) {
+    return res.json({
+      message: "Oops, couldn't edit the post requested.",
+      error: error.message,
+    });
   }
 });
