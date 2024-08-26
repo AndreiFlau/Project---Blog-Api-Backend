@@ -44,8 +44,15 @@ async function editPostQuery(postId, post) {
     data: {
       title: post.title,
       content: post.content,
+      published: post.published,
     },
   });
 }
 
-module.exports = { getAllPostsQuery, getPostQuery, createPostQuery, deletePostQuery, editPostQuery };
+module.exports = {
+  getAllPostsQuery,
+  getPostQuery,
+  createPostQuery,
+  deletePostQuery,
+  editPostQuery,
+};

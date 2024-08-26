@@ -1,5 +1,14 @@
 const asyncHandler = require("express-async-handler");
-const { getAllPostsQuery, getPostQuery, createPostQuery, deletePostQuery, editPostQuery } = require("../db/postQueries");
+const {
+  getAllPostsQuery,
+  getPostQuery,
+  createPostQuery,
+  deletePostQuery,
+  editPostQuery,
+  publishPostQuery,
+  unpublishPostQuery,
+} = require("../db/postQueries");
+const { parseBoolean } = require("../parseBool");
 
 exports.getAllPosts = asyncHandler(async (req, res) => {
   try {
@@ -58,8 +67,16 @@ exports.editPost = asyncHandler(async (req, res) => {
   try {
     const postId = Number(req.params.id);
 
+    let published = false;
+
+    if (req.body.published) {
+      published = parseBoolean(req.body.published);
+    }
+
     const post = {
+      title: req.body.title,
       content: req.body.content,
+      published: published,
     };
 
     await editPostQuery(postId, post);
