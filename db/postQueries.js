@@ -21,6 +21,7 @@ async function createPostQuery(post, id) {
     data: {
       title: post.title,
       content: post.content,
+      published: post.published,
       userId: id,
     },
   });
