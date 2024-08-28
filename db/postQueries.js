@@ -30,7 +30,7 @@ async function createPostQuery(post, id) {
 }
 
 async function deletePostQuery(id) {
-  await prisma.user.delete({
+  await prisma.posts.delete({
     where: {
       id: id,
     },
