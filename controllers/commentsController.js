@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 const {
   getAllCommentsQuery,
   getCommentQuery,
@@ -7,6 +8,8 @@ const {
   getAllCommentsFromPostQuery,
   editCommentQuery,
 } = require("../db/commentsQueries");
+
+const validateComment = [body("content").isLength({ min: 1, max: 1000 }).withMessage("Comment is too long.")];
 
 exports.getAllComments = asyncHandler(async (req, res) => {
   try {
@@ -55,26 +58,36 @@ exports.getComment = asyncHandler(async (req, res) => {
   }
 });
 
-exports.createComment = asyncHandler(async (req, res) => {
-  try {
-    const postId = Number(req.params.id);
-    const comment = {
-      content: req.body.content,
-    };
+exports.createComment = [
+  validateComment,
+  asyncHandler(async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.json({
+          message: "Oops, couldn't create the comment requested.",
+          error: errors,
+        });
+      }
+      const postId = Number(req.params.id);
+      const comment = {
+        content: req.body.content,
+      };
 
-    //get userid based on session id
-    const id = Number(req.user.id);
+      //get userid based on session id
+      const id = Number(req.user.id);
 
-    const commentQ = await createCommentQuery(comment, id, postId);
+      const commentQ = await createCommentQuery(comment, id, postId);
 
-    return res.send("Comment created successfully!");
-  } catch (error) {
-    return res.json({
-      message: "Oops, couldn't create the comment requested.",
-      error: error.message,
-    });
-  }
-});
+      return res.send("Comment created successfully!");
+    } catch (error) {
+      return res.json({
+        message: "Oops, couldn't create the comment requested.",
+        error: error.message,
+      });
+    }
+  }),
+];
 
 exports.deleteComment = asyncHandler(async (req, res) => {
   try {
