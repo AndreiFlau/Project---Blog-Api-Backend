@@ -1,79 +1,31 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const prisma = new PrismaClient();
 
-module.exports = function () {
-  passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      try {
-        const user = await prisma.user.findFirst({
-          where: {
-            username: username,
-          },
-        });
+async function authAdmin(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
-        if (!user) {
-          return done(null, false, { message: "Incorrect username" });
-        }
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-          return done(null, false, { message: "Incorrect password" });
-        }
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: req.user.id,
+        isAdmin: true,
+      },
+    });
 
-        const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: "7d" });
+    if (!user) {
+      return res.status(403).json({ message: "Access denied. Admin privileges required." });
+    }
 
-        return done(null, { user, token });
-      } catch (err) {
-        return done(err);
-      }
-    })
-  );
+    next();
+  } catch (error) {
+    console.log(error);
 
-  passport.use(
-    new JwtStrategy(
-      { jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: process.env.SECRET_KEY },
-      async (jwtPayload, done) => {
-        try {
-          const user = await prisma.user.findFirst({
-            where: {
-              id: jwtPayload.id,
-              isAdmin: true,
-            },
-          });
+    return res.status(500).json({ message: "Something happened on the server." });
+  }
+}
 
-          if (!user) {
-            return done(null, false);
-          }
-          return done(null, user);
-        } catch (error) {
-          return done(error, false);
-        }
-      }
-    )
-  );
-
-  // passport.serializeUser((user, done) => {
-  //   done(null, user.id);
-  // });
-
-  // passport.deserializeUser(async (id, done) => {
-  //   try {
-  //     const user = await prisma.user.findFirst({
-  //       where: {
-  //         id: id,
-  //       },
-  //     });
-
-  //     done(null, user);
-  //   } catch (err) {
-  //     done(err);
-  //   }
-  // });
-};
+module.exports = authAdmin;

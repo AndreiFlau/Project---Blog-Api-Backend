@@ -28,7 +28,7 @@ app.set("view engine", "ejs");
 auth(app);
 
 app.use("/api", passport.authenticate("jwt", { session: false }), indexRouter);
-authAdmin(app.use("/admin", passport.authenticate("jwt", { session: false }), adminRouter));
+app.use("/admin", passport.authenticate("jwt", { session: false }), authAdmin, adminRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 
