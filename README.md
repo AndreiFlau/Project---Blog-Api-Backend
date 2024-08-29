@@ -1,8 +1,3 @@
-# Backend-Template
-npm init -y <br>
-npm install express express-session pg passport passport-local ejs express-validator bcryptjs express-async-handler
-
-# With Prisma
-npm install express express-session pg passport passport-local ejs express-validator bcryptjs express-async-handler @prisma/client dotenv <br>
-npm install prisma --save-dev <br>
-npx prisma init
+##Blog Dashboard
+This is the dashboard part of my blog api project.
+Check out the main frontend [here](https://github.com/AndreiFlau/Project---Blog-Api-Frontend) and the dashboard frontend [here](https://github.com/AndreiFlau/Project---Blog-Api-Dashboard).
