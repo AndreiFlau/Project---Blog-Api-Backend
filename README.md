@@ -10,7 +10,7 @@ DATABASE_URL=YOURDATABASEURL
 PORT=8080
 SECRET_KEY=SOMESECRETKEY
 
-Make a database in the same format as seen in the [schema](prisma/schema.prisma)
+Make a database in the same format as the [schema](prisma/schema.prisma)
 
 Then clone the repo and run the commands below on the project's directory to get the backend going.
 
