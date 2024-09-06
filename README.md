@@ -6,9 +6,12 @@ Check out the main frontend [here](https://github.com/AndreiFlau/Project---Blog-
 ## Installation
 
 First make sure that you have a .env file formatted like this:
+
+```
 DATABASE_URL=YOURDATABASEURL
 PORT=8080
 SECRET_KEY=SOMESECRETKEY
+```
 
 Make a database in the same format as the [schema](prisma/schema.prisma)
 
